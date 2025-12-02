@@ -1,5 +1,32 @@
 # ATLI 相机实时处理系统 - 服务器部署指南
 
+## 📋 快速部署检查清单
+
+### ✅ 部署前准备
+- [ ] 确认操作系统: CentOS 7/8 或 Ubuntu 18.04+
+- [ ] 确认Python版本: 3.8+
+- [ ] 确认有Root权限
+- [ ] 准备好所有项目文件
+
+### ✅ 核心文件清单
+- `RT_Pixel_Ex.py`, `Ex_Pixel.py`, `Ex_center_yuan.py`, `ocr_Ex_time.py`
+- `config_loader.py`, `config.yaml`, `requirements.txt`
+- `deploy.sh`, `atli_monitor.sh`, `view_logs.sh`
+
+### 🚀 快速部署步骤
+```bash
+# 1. 上传所有文件到服务器
+# 2. 给脚本执行权限并运行
+chmod +x deploy.sh
+sudo ./deploy.sh
+
+# 3. 查看运行状态
+sudo systemctl status atli-camera-monitor
+sudo journalctl -u atli-camera-monitor -f
+```
+
+---
+
 ## 概述
 
 本系统用于实时监控和处理 ATLI 相机上传的图片，包括 OCR 时间戳提取、像素坐标提取、图片标注和备份功能。
