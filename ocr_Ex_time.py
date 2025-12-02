@@ -3,10 +3,33 @@ import cv2
 import re
 from datetime import datetime
 import numpy as np
+import os
 
-# 设置Tesseract路径
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-# TODO: 支持通过环境变量或配置文件覆盖 Tesseract 路径，避免硬编码。
+# 设置Tesseract路径 - 优先从环境变量读取，否则使用默认值
+def _get_tesseract_cmd():
+    """获取 Tesseract 可执行文件路径"""
+    # 优先使用环境变量
+    env_path = os.environ.get('TESSERACT_CMD')
+    if env_path and os.path.exists(env_path):
+        return env_path
+
+    # 尝试从配置文件加载
+    try:
+        from config_loader import load_config
+        config = load_config('config.yaml')
+        return config.get_tesseract_cmd()
+    except:
+        pass
+
+    # 根据操作系统返回默认路径
+    if os.name == 'nt':  # Windows
+        default_path = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    else:  # Linux/Unix
+        default_path = '/usr/bin/tesseract'
+
+    return default_path
+
+pytesseract.pytesseract.tesseract_cmd = _get_tesseract_cmd()
 
 
 def extract_timestamp_from_image(image_path, coord):
