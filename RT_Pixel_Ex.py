@@ -16,26 +16,21 @@ import shutil
 from Ex_Pixel import ExPixelCoord
 
 def Ex_pixel(src_path):
+    """
+    示例函数：根据图片路径返回单个像素点，实际逻辑由 ExPixelCoord 替换。
+    """
     return np.array([[120, 280]])
 
 class CameraMonitor:
+    """统一管理多台相机的上传目录监控与事件分发。"""
     def __init__(self, base_upload_path, base_processed_path, camera_configs):
         """
-        初始化相机监控器
+        初始化顶层监控器，负责为每个相机场景创建事件观察者和像素提取器。
+
         Args:
-            base_upload_path: 基础上传路径
-            base_processed_path: 基础处理路径
-            camera_configs: 相机配置字典，格式为：
-                {
-                    'camera1': {
-                        'polygon_pts': np.array([...]),  # 多边形区域坐标
-                        'pre_points': None  # 初始化的前一点，可为None
-                    },
-                    'camera2': {
-                        'polygon_pts': np.array([...]),
-                        'pre_points': None
-                    }
-                }
+            base_upload_path: ATLI 上传目录根路径（监听源）。
+            base_processed_path: 处理结果根路径（输出像素与备份）。
+            camera_configs: 每台相机的 ROI 配置，用于实例化 ExPixelCoord。
         """
         self.base_upload_path = base_upload_path
         self.base_processed_path = base_processed_path
@@ -54,7 +49,11 @@ class CameraMonitor:
                 print(f"警告: 相机 {camera_name} 缺少 polygon_pts 配置")
 
     def start_monitoring(self):
-        """开始监控所有相机"""
+        """
+        遍历相机列表，为每个上传目录启动 watchdog 观察者并绑定事件处理器。
+
+        同时确保对应的处理输出目录存在，便于后续写入像素与备份文件。
+        """
         for camera in self.cameras:
             camera_upload_path = os.path.join(self.base_upload_path, camera)
             camera_processed_path = os.path.join(self.base_processed_path, camera)
@@ -74,7 +73,11 @@ class CameraMonitor:
             print(f"开始监控相机: {camera}")
 
     def stop_monitoring(self):
-        """停止所有监控"""
+        """
+        停止并回收所有活跃观察者，释放底层线程资源。
+
+        用于脚本退出或键盘中断时的善后工作。
+        """
         for observer in self.observers:
             observer.stop()
         for observer in self.observers:
@@ -82,7 +85,11 @@ class CameraMonitor:
 
 
 class CameraHandler(FileSystemEventHandler):
+    """监听单个相机上传目录并动态切换最新批次。"""
     def __init__(self, camera_upload_path, camera_processed_path, ex_pixel_coord_obj):
+        """
+        构建相机级观察者，记录上传/处理路径并保留像素提取对象。
+        """
         super().__init__()
         self.camera_upload_path = camera_upload_path
         self.camera_processed_path = camera_processed_path
@@ -94,7 +101,11 @@ class CameraHandler(FileSystemEventHandler):
         self.update_current_time_folder()
 
     def update_current_time_folder(self):
-        """更新当前监控的最新时间文件夹"""
+        """
+        扫描相机目录下的 TLS_* 子目录，锁定编号最大的时间文件夹并开始监听。
+
+        如检测到新文件夹，会切换到新的 Observer，避免老目录阻塞资源。
+        """
         time_folders = [f for f in os.listdir(self.camera_upload_path)
                         if f.startswith('TLS_') and os.path.isdir(os.path.join(self.camera_upload_path, f))]
 
@@ -140,20 +151,30 @@ class CameraHandler(FileSystemEventHandler):
             self.time_folder_observer.start()
 
     def on_created(self, event):
-        """处理新创建的时间文件夹"""
+        """
+        监听 TLS_* 目录的创建事件并触发监控切换。
+
+        通过 watchdog 的回调接口实时响应生成的新批次目录。
+        """
         if event.is_directory and event.src_path.startswith(os.path.join(self.camera_upload_path, 'TLS_')):
             print(f"检测到新时间文件夹: {os.path.basename(event.src_path)}")
             self.update_current_time_folder()
 
     def on_deleted(self, event):
-        """处理删除的时间文件夹"""
+        """
+        当当前监控的时间目录被删除时，重新扫描以保证处理不会中断。
+        """
         if event.is_directory and event.src_path == self.current_time_folder:
             print(f"当前监控的时间文件夹被删除: {os.path.basename(event.src_path)}")
             self.update_current_time_folder()
 
 
 class TimeFolderHandler(FileSystemEventHandler):
+    """针对特定时间批次的图片事件处理器，负责 OCR 与像素提取。"""
     def __init__(self, time_folder_path, camera_processed_path:str,ex_pixel_coord_obj):
+        """
+        缓存批次目录、目标输出目录及 ExPixelCoord，供后续事件调用。
+        """
         super().__init__()
         self.time_folder_path = time_folder_path
         self.camera_processed_path = camera_processed_path
@@ -167,7 +188,9 @@ class TimeFolderHandler(FileSystemEventHandler):
         self.processing_lock = threading.Lock()
 
     def get_time_stamp_from_image(self, image_path):
-        """从0001图片中提取时间戳"""
+        """
+        针对 _0001 首帧执行 OCR，成功后缓存批次时间戳。
+        """
         try:
             # 调用您提供的方法
             return ocr_Ex_time(image_path,self.ocr_coord)
@@ -176,7 +199,9 @@ class TimeFolderHandler(FileSystemEventHandler):
             return None
 
     def create_processed_directory(self, time_stamp):
-        """创建处理结果目录结构"""
+        """
+        根据时间戳创建 pixel/img 子目录，并标记目录已准备好。
+        """
         processed_dir = os.path.join(self.camera_processed_path, time_stamp)
         pixel_dir = os.path.join(processed_dir, 'pixel')
         img_dir = os.path.join(processed_dir, 'img')  # 新增img目录
@@ -187,6 +212,9 @@ class TimeFolderHandler(FileSystemEventHandler):
         return pixel_dir, img_dir  # 返回两个目录路径
 
     def on_created(self, event):
+        """
+        监听批次内 JPG/PNG 的创建，串行处理文件并触发时间戳抽取。
+        """
         if not event.is_directory and event.src_path.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp')):
             filename = os.path.basename(event.src_path)
 
@@ -196,6 +224,7 @@ class TimeFolderHandler(FileSystemEventHandler):
                 if filename.endswith('_0001.jpg') or filename.endswith('_0001.png'):
                     print(f"检测到0001图片: {filename}")
                     time.sleep(2)  # 等待文件完全写入
+                    # TODO: 改为检测文件句柄释放或文件大小稳定，避免盲目 sleep。
 
                     # 提取时间戳
                     self.time_stamp = self.get_time_stamp_from_image(event.src_path)
@@ -206,11 +235,14 @@ class TimeFolderHandler(FileSystemEventHandler):
                 # 处理所有图片文件（包括0001图片）
                 if filename not in self.processed_files:
                     time.sleep(2)
+                    # TODO: 统一封装文件就绪判断逻辑，减少重复等待。
                     self.processed_files.add(filename)
                     self.process_image(event.src_path, filename)
 
     def process_image(self, src_path, filename):
-        """处理单个图片的独立方法"""
+        """
+        对新图片执行业务流程：提取像素->落盘->备份绘制->删除源文件。
+        """
         print(f"处理图片: {src_path}")
 
         # 如果时间戳不存在，尝试从0001图片重新提取
@@ -262,12 +294,15 @@ class TimeFolderHandler(FileSystemEventHandler):
             del img
 
             os.remove(src_path)
+            # TODO: 为 os.remove 增加异常回退，比如移动到 quarantine 目录。
 
         except Exception as e:
             print(f"处理图片 {filename} 时出错: {str(e)}")
 
     def get_time_stamp_from_0001_image(self):
-        """尝试从现有的0001图片重新提取时间戳"""
+        """
+        搜索当前批次下的 0001 图片并再次尝试 OCR，避免时间戳缺失。
+        """
         for f in os.listdir(self.time_folder_path):
             if f.endswith(('_0001.jpg', '_0001.png')):
                 filepath = os.path.join(self.time_folder_path, f)
@@ -277,8 +312,8 @@ class TimeFolderHandler(FileSystemEventHandler):
 
 # 使用示例
 if __name__ == "__main__":
-    base_upload_path = r"G:\Outdoor_RTCamProc\RT_text\atli_uploads"
-    base_processed_path = r"G:\Outdoor_RTCamProc\RT_text\atli_processed"
+    base_upload_path = r"D:\pic_back\atli_uploads"
+    base_processed_path = r"D:\pic_back\atli_process"
     camera_configs = {
         'camera1': {
             'polygon_pts': np.array([(1099, 1608), (1101, 825), (2925, 835), (2925, 1667)], dtype=np.int32),

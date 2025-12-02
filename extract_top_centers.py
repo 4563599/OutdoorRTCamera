@@ -17,6 +17,7 @@ def calculate_completeness(contour: np.ndarray) -> float:
     返回:
     completeness: 0-1之间的值，越接近1表示轮廓越完整
     """
+    # 功能说明: 取轮廓与凸包的面积比值，作为判断遮挡程度的数值特征。
     hull = cv2.convexHull(contour)
     hull_area = cv2.contourArea(hull)
     contour_area = cv2.contourArea(contour)

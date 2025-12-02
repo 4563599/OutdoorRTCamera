@@ -5,10 +5,14 @@ import random
 
 
 def simulate_image_transfer():
-    """模拟向相机文件夹传输图片的脚本"""
+    """
+    在本地构造与服务器一致的目录结构，逐相机拷贝样例图片以驱动监控脚本。
+
+    会自动创建 TLS_* 批次目录、随机后缀，并按顺序复制多张图片。
+    """
 
     # 基础路径
-    base_upload_path = r"G:\Outdoor_RTCamProc\RT_text\atli_uploads"
+    base_upload_path = r"D:\pic_back\atli_uploads"
     ocr_text_img_path = "ocr_text_img"  # 源图片文件夹
 
     # 相机列表
@@ -83,11 +87,13 @@ def simulate_image_transfer():
             if img_num < 5:  # 最后一张不需要等待
                 print("等待15秒...")
                 time.sleep(15)  # 实际使用时为60秒，测试时可改为5-10秒
+                # TODO: 将等待时间提取为参数，便于不同测试场景复用。
 
         # 如果不是最后一个时间段，等待5分钟
         if i < len(time_periods) - 1:
             print(f"\n时间段 {folder_prefix} 完成，等待15秒...")
             time.sleep(15)  # 实际使用时为300秒，测试时可改为15-30秒
+            # TODO: 根据 period 配置动态设置间隔，而不是固定 15 秒。
 
     print("\n=== 所有图片传输完成 ===")
 
