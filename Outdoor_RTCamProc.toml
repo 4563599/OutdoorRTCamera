@@ -1,0 +1,24 @@
+[project]
+name = "Outdoor_RTCamProc"
+version = "1.0.0"
+authors = [
+    { name = "Gong Wei", email = "2985045154@qq.com" }
+]
+description = "For real-time processing of monocular photogrammetry data"
+requires-python = "==3.8"
+dependencies = [
+    "opencv-python==4.5.1.48",
+    "scipy==1.5.4",
+    "watchdog==4.0.2",
+    "matplotlib==3.7.5",
+    "openpyxl==3.1.5",
+    "pytesseract==0.3.13",  # 添加pytesseract包
+]
+
+[project.optional-dependencies]
+tesseract = [
+    "tesseract-ocr",
+]
+
+[project.urls]
+"Tesseract Installation" = "https://github.com/tesseract-ocr/tesseract#installing-tesseract"
