@@ -88,18 +88,31 @@ class ExPixelCoord:
             print("Error: 无法读取图像文件")
             return
 
+        # 转换为HSV颜色空间
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-        lower_blue = np.array([70, 70, 70])
-        upper_blue = np.array([140, 255, 255])
-        # TODO: 允许通过配置或构造函数注入 HSV 阈值，减少硬编码。
 
-        mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
+        # 定义红色的HSV阈值范围（注意：红色在HSV中位于色环两端，需要两个范围）
+        # 红色范围1 (低色相值：0-10)
+        lower_red1 = np.array([0, 70, 70])
+        upper_red1 = np.array([10, 255, 255])
 
-        mask_poly = np.zeros_like(mask_blue)
+        # 红色范围2 (高色相值：170-180)
+        lower_red2 = np.array([170, 70, 70])
+        upper_red2 = np.array([180, 255, 255])
+
+        # 创建红色掩膜（需要组合两个范围）
+        mask_red1 = cv2.inRange(hsv, lower_red1, upper_red1)
+        mask_red2 = cv2.inRange(hsv, lower_red2, upper_red2)
+        mask_red = cv2.bitwise_or(mask_red1, mask_red2)
+
+        # 创建多边形区域掩膜
+        mask_poly = np.zeros_like(mask_red)
         cv2.fillPoly(mask_poly, [self.polygon_pts], 255)
 
-        mask_combined = cv2.bitwise_and(mask_blue, mask_poly)
+        # 联合掩膜：只在多边形区域内检测红色
+        mask_combined = cv2.bitwise_and(mask_red, mask_poly)
+
 
         contours, _ = cv2.findContours(
             mask_combined, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
