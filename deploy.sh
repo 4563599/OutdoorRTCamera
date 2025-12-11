@@ -111,14 +111,11 @@ install_system_deps() {
         yum install -y python38 python38-pip python38-devel
         yum install -y opencv opencv-devel
         yum install -y epel-release
-        yum install -y tesseract tesseract-langpack-eng tesseract-langpack-chi-sim
     elif [[ "$OS" == "ubuntu" ]]; then
         apt update && apt upgrade -y
         apt install -y build-essential
         apt install -y python3.8 python3.8-pip python3.8-dev python3.8-venv
         apt install -y libopencv-dev python3-opencv
-        apt install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-chi-sim
-        apt install -y libtesseract-dev
     fi
 
     log_success "系统依赖安装完成"
@@ -289,14 +286,6 @@ EOF
 # 验证安装
 verify_installation() {
     log_info "验证安装..."
-
-    # 检查 Tesseract
-    if command -v tesseract >/dev/null 2>&1; then
-        log_success "Tesseract 安装正常: $(tesseract --version | head -n1)"
-    else
-        log_error "Tesseract 未正确安装"
-        return 1
-    fi
 
     # 检查 Python 环境
     if sudo -u "$USER_NAME" bash -c "cd $PROJECT_DIR && source venv/bin/activate && python config_loader.py" >/dev/null 2>&1; then

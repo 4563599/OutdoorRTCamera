@@ -1,199 +1,184 @@
 import os
-import time
 import shutil
-import random
+import time
+import threading
+from pathlib import Path
 import logging
 from datetime import datetime
 
-
-def setup_logging():
-    """设置日志配置"""
-    # 创建日志目录
-    log_dir = "logs"
-    os.makedirs(log_dir, exist_ok=True)
-
-    # 生成日志文件名（包含时间戳）
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file = os.path.join(log_dir, f"sim_pic_trans_{timestamp}.log")
-
-    # 配置日志格式
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler(log_file, encoding='utf-8'),
-            logging.StreamHandler()  # 同时输出到控制台
-        ]
-    )
-
-    logger = logging.getLogger(__name__)
-    logger.info(f"日志文件: {log_file}")
-    return logger
+# 设置日志记录
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
-def simulate_image_transfer():
-    """
-    在本地构造与服务器一致的目录结构，逐相机拷贝样例图片以驱动监控脚本。
+class CameraSimulator:
+    def __init__(self, source_base_path, target_base_path, camera_mapping):
+        """
+        初始化相机模拟器
 
-    会自动创建 TLS_* 批次目录、随机后缀，并按顺序复制多张图片。
-    """
+        Args:
+            source_base_path: 源文件夹路径 (serve_text_data)
+            target_base_path: 目标文件夹路径 (RT_text/atli_uploads)
+            camera_mapping: 相机映射字典 {源相机文件夹: 目标相机文件夹}
+        """
+        self.source_base_path = Path(source_base_path)
+        self.target_base_path = Path(target_base_path)
+        self.camera_mapping = camera_mapping
 
-    # 设置日志
-    logger = setup_logging()
+        # 确保目标文件夹存在
+        self.target_base_path.mkdir(parents=True, exist_ok=True)
+        for target_camera in camera_mapping.values():
+            (self.target_base_path / target_camera).mkdir(parents=True, exist_ok=True)
 
-    # 基础路径
-    base_upload_path = r"D:\pic_back\atli_uploads"
-    ocr_text_img_path = "ocr_text_img"  # 源图片文件夹
+    def process_camera(self, source_camera, target_camera):
+        """
+        处理单个相机的图片传输
 
-    logger.info(f"开始图片传输模拟")
-    logger.info(f"上传基础路径: {base_upload_path}")
-    logger.info(f"源图片路径: {ocr_text_img_path}")
+        Args:
+            source_camera: 源相机文件夹名
+            target_camera: 目标相机文件夹名
+        """
+        logger.info(f"开始处理相机 {source_camera} -> {target_camera}")
 
-    # 相机列表
-    cameras = ["camera1", "camera2"]
-    logger.info(f"目标相机: {cameras}")
+        # 源相机路径
+        source_camera_path = self.source_base_path / source_camera
 
-    # 时间段配置
-    time_periods = [
-        {
-            "source_img": "TLS_0202_0001.jpg",
-            "folder_prefix": "TLS_0202",
-            "random_suffixes": ["-random"]
-        },
-        {
-            "source_img": "TLS_0203_0001.jpg",
-            "folder_prefix": "TLS_0203",
-            "random_suffixes": ["-test123"]
-        }
-    ]
-
-    logger.info(f"配置时间段数量: {len(time_periods)}")
-    for i, period in enumerate(time_periods):
-        logger.info(f"时间段{i+1}: {period['folder_prefix']} - 源图片: {period['source_img']}")
-
-    # 检查源图片是否存在
-    logger.info("开始检查源图片...")
-    for period in time_periods:
-        source_path = os.path.join(ocr_text_img_path, period["source_img"])
-        if not os.path.exists(source_path):
-            logger.error(f"源图片不存在: {source_path}")
-            print(f"错误: 源图片不存在 - {source_path}")
+        # 检查源相机文件夹是否存在
+        if not source_camera_path.exists():
+            logger.error(f"源相机文件夹不存在: {source_camera_path}")
             return
-        else:
-            logger.info(f"源图片检查通过: {source_path}")
 
-    logger.info("=" * 50)
-    logger.info("开始模拟图片传输...")
-    print("开始模拟图片传输...")
+        # 获取时间段文件夹并排序
+        time_folders = sorted([
+            folder for folder in source_camera_path.iterdir()
+            if folder.is_dir()
+        ])
 
-    # 处理每个时间段
-    for i, period in enumerate(time_periods):
-        source_img = period["source_img"]
-        folder_prefix = period["folder_prefix"]
+        logger.info(f"相机 {source_camera} 找到 {len(time_folders)} 个时间段文件夹")
 
-        logger.info(f"=" * 30)
-        logger.info(f"开始处理时间段 {i+1}/{len(time_periods)}: {folder_prefix}")
-        logger.info(f"源图片: {source_img}")
-        print(f"\n=== 开始处理时间段: {folder_prefix} ===")
+        for time_folder in time_folders:
+            # 1. 创建同名时间段文件夹
+            target_time_folder = self.target_base_path / target_camera / time_folder.name
+            target_time_folder.mkdir(exist_ok=True)
+            logger.info(f"相机 {source_camera}: 创建文件夹 {target_time_folder}")
 
-        # 为每个相机创建时间文件夹并传输图片
-        created_folders = {}  # 记录创建的文件夹路径
-        for camera in cameras:
-            # 随机选择后缀
-            suffix = random.choice(period["random_suffixes"])
-            time_folder_name = f"{folder_prefix}{suffix}"
-            time_folder_path = os.path.join(base_upload_path, camera, time_folder_name)
+            # 等待2秒
+            time.sleep(5)
 
-            # 创建时间文件夹
-            try:
-                os.makedirs(time_folder_path, exist_ok=True)
-                created_folders[camera] = time_folder_name
-                logger.info(f"创建文件夹成功: {camera}/{time_folder_name}")
-                print(f"创建文件夹: {time_folder_path}")
-            except Exception as e:
-                logger.error(f"创建文件夹失败: {time_folder_path}, 错误: {e}")
-                print(f"错误: 创建文件夹失败 - {time_folder_path}")
-                continue
+            # 2. 获取时间段文件夹中的图片并排序
+            image_files = sorted([
+                img for img in time_folder.iterdir()
+                if img.is_file() and img.suffix.lower() in ['.jpg', '.jpeg', '.png']
+            ])
 
-        logger.info("等待2秒后开始图片传输...")
-        time.sleep(2)
+            logger.info(f"相机 {source_camera}/{time_folder.name}: 找到 {len(image_files)} 张图片")
 
-        # 传输3张递增图片
-        total_images = 3
-        success_count = 0
-        error_count = 0
+            # 3. 每隔15秒复制一张图片
+            for img_file in image_files:
+                # 复制图片
+                target_img_path = target_time_folder / img_file.name
 
-        for img_num in range(1, total_images + 1):
-            # 生成图片文件名
-            filename = f"{folder_prefix}_{img_num:04d}.jpg"
-            source_path = os.path.join(ocr_text_img_path, period["source_img"])
-
-            logger.info(f"开始传输图片 {img_num}/{total_images}: {filename}")
-            print(f"\n传输图片 {img_num}/{total_images}: {filename}")
-
-            # 向每个相机文件夹传输图片
-            for camera in cameras:
                 try:
-                    # 找到该相机的对应时间文件夹
-                    camera_path = os.path.join(base_upload_path, camera)
-                    time_folders = [f for f in os.listdir(camera_path)
-                                    if f.startswith(folder_prefix) and os.path.isdir(os.path.join(camera_path, f))]
-
-                    if time_folders:
-                        time_folder = time_folders[0]  # 取第一个匹配的文件夹
-                        dest_path = os.path.join(camera_path, time_folder, filename)
-
-                        # 记录文件大小
-                        file_size = os.path.getsize(source_path)
-
-                        # 复制图片
-                        start_time = time.time()
-                        shutil.copy2(source_path, dest_path)
-                        copy_time = time.time() - start_time
-
-                        # 验证复制结果
-                        if os.path.exists(dest_path):
-                            dest_size = os.path.getsize(dest_path)
-                            if dest_size == file_size:
-                                logger.info(f"✅ {camera}/{time_folder}/{filename} 传输成功 ({file_size} bytes, 耗时 {copy_time:.3f}s)")
-                                print(f"  传输到 {camera}/{time_folder}: {filename}")
-                                success_count += 1
-                            else:
-                                logger.warning(f"⚠️ {camera}/{time_folder}/{filename} 文件大小不匹配 (源:{file_size} vs 目标:{dest_size})")
-                                error_count += 1
-                        else:
-                            logger.error(f"❌ {camera}/{time_folder}/{filename} 复制后文件不存在")
-                            error_count += 1
-                    else:
-                        logger.error(f"❌ {camera} 未找到匹配的时间文件夹 (prefix: {folder_prefix})")
-                        error_count += 1
-
+                    shutil.copy2(img_file, target_img_path)
+                    logger.info(f"相机 {source_camera}: 复制 {img_file.name} -> {target_img_path}")
                 except Exception as e:
-                    logger.error(f"❌ {camera} 图片传输异常: {filename}, 错误: {e}")
-                    error_count += 1
+                    logger.error(f"复制图片失败: {e}")
+                    continue
 
-            # 等待间隔
-            if img_num < total_images:  # 最后一张不需要等待
-                logger.info("等待15秒后传输下一张图片...")
-                print("等待15秒...")
-                time.sleep(15)  # 实际使用时为60秒，测试时可改为5-10秒
+                time.sleep(15)
 
-        # 记录时间段传输统计
-        logger.info(f"时间段 {folder_prefix} 传输统计: 成功 {success_count}, 失败 {error_count}")
+            # 4. 当前时间段文件夹所有图片复制完成后，等待15秒
+            logger.info(f"相机 {source_camera}/{time_folder.name}: 所有图片复制完成，等待15秒")
+            time.sleep(15)
 
-        # 如果不是最后一个时间段，等待间隔
-        if i < len(time_periods) - 1:
-            logger.info(f"时间段 {folder_prefix} 完成，等待15秒后处理下一时间段...")
-            print(f"\n时间段 {folder_prefix} 完成，等待15秒...")
-            time.sleep(15)  # 实际使用时为300秒，测试时可改为15-30秒
+        logger.info(f"相机 {source_camera} 处理完成")
 
-    logger.info("=" * 50)
-    logger.info("所有图片传输任务完成")
-    total_success = success_count * len(time_periods)
-    total_error = error_count * len(time_periods)
-    logger.info(f"总体统计: 成功 {total_success}, 失败 {total_error}")
-    print("\n=== 所有图片传输完成 ===")
+    def simulate_all_cameras(self):
+        """
+        模拟所有相机的传输流程（使用多线程实现同时传输）
+        """
+        threads = []
 
+        # 为每个相机创建线程
+        for source_camera, target_camera in self.camera_mapping.items():
+            thread = threading.Thread(
+                target=self.process_camera,
+                args=(source_camera, target_camera),
+                name=f"Camera-{source_camera}"
+            )
+            threads.append(thread)
+            thread.start()
+            logger.info(f"启动相机 {source_camera} 的传输线程")
+
+        # 等待所有线程完成
+        for thread in threads:
+            thread.join()
+
+        logger.info("所有相机传输完成")
+
+
+def main():
+    """
+    主函数
+    """
+    # 配置路径和映射关系
+    SOURCE_BASE = "serve_text_data"
+    TARGET_BASE = "RT_text/atli_uploads"
+
+    # 相机映射关系：{源相机文件夹: 目标相机文件夹}
+    CAMERA_MAPPING = {
+        "176": "camera1",  # 源相机176 -> 目标camera1
+        "293": "camera2"  # 源相机293 -> 目标camera2
+    }
+
+    # 创建模拟器并开始传输
+    simulator = CameraSimulator(SOURCE_BASE, TARGET_BASE, CAMERA_MAPPING)
+
+    try:
+        simulator.simulate_all_cameras()
+        print("\n" + "=" * 60)
+        print("传输模拟完成！")
+        print("=" * 60)
+
+        # 显示目标文件夹结构
+        print("\n目标文件夹结构:")
+        show_folder_structure(TARGET_BASE, prefix="  ")
+
+    except KeyboardInterrupt:
+        print("\n传输被用户中断")
+    except Exception as e:
+        logger.error(f"传输过程中发生错误: {e}")
+
+
+def show_folder_structure(folder_path, prefix=""):
+    """
+    显示文件夹结构
+
+    Args:
+        folder_path: 文件夹路径
+        prefix: 显示前缀
+    """
+    try:
+        for item in sorted(Path(folder_path).iterdir()):
+            if item.is_dir():
+                print(f"{prefix}├── {item.name}/")
+                # 显示子目录下的文件夹
+                for subitem in sorted(item.iterdir()):
+                    if subitem.is_dir():
+                        print(f"{prefix}│   ├── {subitem.name}/")
+                        # 显示图片文件
+                        images = sorted([
+                            f.name for f in subitem.iterdir()
+                            if f.is_file() and f.suffix.lower() in ['.jpg', '.jpeg', '.png']
+                        ])
+                        for i, img in enumerate(images):
+                            connector = "└──" if i == len(images) - 1 else "├──"
+                            print(f"{prefix}│   │   {connector} {img}")
+    except Exception as e:
+        print(f"{prefix}错误: {e}")
 
 if __name__ == "__main__":
-    simulate_image_transfer()
+    main()

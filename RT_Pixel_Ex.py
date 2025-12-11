@@ -13,10 +13,11 @@ import cv2
 import numpy as np
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from ocr_Ex_time import ocr_Ex_time
 import threading
 from Ex_Pixel import ExPixelCoord
 from config_loader import load_config
+from PIL import Image
+import shutil
 
 def setup_logging(log_file=None):
     """设置日志配置"""
@@ -47,15 +48,9 @@ def setup_logging(log_file=None):
     logger.info(f"日志系统已启动，日志文件: {log_file}")
     return logger
 
-def Ex_pixel(src_path):
-    """
-    示例函数：根据图片路径返回单个像素点，实际逻辑由 ExPixelCoord 替换。
-    """
-    return np.array([[120, 280]])
-
 class CameraMonitor:
     """统一管理多台相机的上传目录监控与事件分发。"""
-    def __init__(self, base_upload_path, base_processed_path, camera_configs, ocr_coord=None, wait_time=2, draw_params=None, logger=None):
+    def __init__(self, base_upload_path, base_processed_path, camera_configs,  wait_time=2, logger=None):
         """
         初始化顶层监控器，负责为每个相机场景创建事件观察者和像素提取器。
 
@@ -63,24 +58,19 @@ class CameraMonitor:
             base_upload_path: ATLI 上传目录根路径（监听源）。
             base_processed_path: 处理结果根路径（输出像素与备份）。
             camera_configs: 每台相机的 ROI 配置，用于实例化 ExPixelCoord。
-            ocr_coord: OCR 时间戳区域坐标 (x1, y1, x2, y2)。
             wait_time: 文件写入等待时间（秒）。
-            draw_params: 图片绘制参数字典。
         """
         self.base_upload_path = base_upload_path
         self.base_processed_path = base_processed_path
         self.camera_configs = camera_configs
         self.cameras = list(camera_configs.keys())
         self.observers = []
-        self.ocr_coord = ocr_coord
         self.wait_time = wait_time
-        self.draw_params = draw_params
         self.logger = logger or logging.getLogger('atli_monitor.camera_monitor')
 
         self.logger.info(f"初始化相机监控器 - 相机数量: {len(self.cameras)}")
         self.logger.info(f"监控路径: {base_upload_path}")
         self.logger.info(f"处理路径: {base_processed_path}")
-        self.logger.info(f"OCR区域: {ocr_coord}")
         self.logger.info(f"等待时间: {wait_time}秒")
 
         # 为每个相机创建ExPixelCoord对象
@@ -115,9 +105,7 @@ class CameraMonitor:
                 camera_upload_path,
                 camera_processed_path,
                 ex_pixel_coord_obj,
-                ocr_coord=self.ocr_coord,
                 wait_time=self.wait_time,
-                draw_params=self.draw_params,
                 logger=self.logger
             )
             observer = Observer()
@@ -140,7 +128,7 @@ class CameraMonitor:
 
 class CameraHandler(FileSystemEventHandler):
     """监听单个相机上传目录并动态切换最新批次。"""
-    def __init__(self, camera_upload_path, camera_processed_path, ex_pixel_coord_obj, ocr_coord=None, wait_time=2, draw_params=None, logger=None):
+    def __init__(self, camera_upload_path, camera_processed_path, ex_pixel_coord_obj,wait_time=2,  logger=None):
         """
         构建相机级观察者，记录上传/处理路径并保留像素提取对象。
         """
@@ -148,9 +136,7 @@ class CameraHandler(FileSystemEventHandler):
         self.camera_upload_path = camera_upload_path
         self.camera_processed_path = camera_processed_path
         self.ex_pixel_coord_obj = ex_pixel_coord_obj
-        self.ocr_coord = ocr_coord
         self.wait_time = wait_time
-        self.draw_params = draw_params
         self.logger = logger or logging.getLogger('atli_monitor.camera_handler')
         self.current_time_folder = None
         self.time_folder_observer = None
@@ -205,9 +191,7 @@ class CameraHandler(FileSystemEventHandler):
                 self.current_time_folder,
                 self.camera_processed_path,
                 self.ex_pixel_coord_obj,
-                ocr_coord=self.ocr_coord,
                 wait_time=self.wait_time,
-                draw_params=self.draw_params,
                 logger=self.logger
             )
             self.time_folder_observer.schedule(
@@ -238,7 +222,7 @@ class CameraHandler(FileSystemEventHandler):
 
 class TimeFolderHandler(FileSystemEventHandler):
     """针对特定时间批次的图片事件处理器，负责 OCR 与像素提取。"""
-    def __init__(self, time_folder_path, camera_processed_path:str, ex_pixel_coord_obj, ocr_coord=None, wait_time=2, draw_params=None, logger=None):
+    def __init__(self, time_folder_path, camera_processed_path:str, ex_pixel_coord_obj,  wait_time=2,  logger=None):
         """
         缓存批次目录、目标输出目录及 ExPixelCoord，供后续事件调用。
         """
@@ -246,89 +230,75 @@ class TimeFolderHandler(FileSystemEventHandler):
         self.time_folder_path = time_folder_path
         self.camera_processed_path = camera_processed_path
         self.ex_pixel_coord_obj = ex_pixel_coord_obj
-        self.time_stamp = None
         self.processed_files = set()
-        self.processed_dir_created = False
+        self.target_folder_name = None
         self.pixel_dir = None
         self.img_dir = None
-        self.ocr_coord = ocr_coord if ocr_coord else (182, 1893, 810, 1962)
+        self.draw_img_dir = None
         self.wait_time = wait_time
-        self.draw_params = draw_params if draw_params else {
-            'circle_radius': 2,
-            'circle_color': [0, 255, 0],
-            'font_scale': 3,
-            'font_thickness': 2,
-            'font_color': [0, 255, 0]
-        }
         self.logger = logger or logging.getLogger('atli_monitor.time_folder_handler')
         self.processing_lock = threading.Lock()
 
+        # 提取文件夹名前8个字符作为目标文件夹名
         folder_name = os.path.basename(time_folder_path)
+        self.target_folder_name = folder_name[:8] if len(folder_name) >= 8 else folder_name
+
+        # 创建目标目录结构
+        self.create_target_directories()
         camera_name = os.path.basename(os.path.dirname(time_folder_path))
         self.logger.info(f"初始化时间文件夹处理器 - {camera_name}/{folder_name}")
         self.logger.info(f"监控路径: {time_folder_path}")
-        self.logger.info(f"OCR区域: {ocr_coord}")
         self.logger.info(f"等待时间: {wait_time}秒")
 
-    def get_time_stamp_from_image(self, image_path):
-        """
-        针对 _0001 首帧执行 OCR，成功后缓存批次时间戳。
-        """
-        try:
-            # 调用您提供的方法
-            return ocr_Ex_time(image_path,self.ocr_coord)
-        except Exception as e:
+    def create_target_directories(self):
+        """创建目标目录结构"""
+        target_dir = os.path.join(self.camera_processed_path, self.target_folder_name)
+        self.pixel_dir = os.path.join(target_dir, 'pixel')
+        self.img_dir = os.path.join(target_dir, 'img')
+        self.draw_img_dir=os.path.join(target_dir, 'draw_img')
 
+        os.makedirs(self.pixel_dir, exist_ok=True)
+        os.makedirs(self.img_dir, exist_ok=True)
+        os.makedirs(self.draw_img_dir, exist_ok=True)
+        print(f"已创建目标目录: {target_dir}")
+
+    def get_image_timestamp(self, image_path):
+        """从图片EXIF数据中获取拍摄时间戳"""
+        try:
+            # 打开图片并获取EXIF数据
+            image = Image.open(image_path)
+            exifdata = image.getexif()
+
+            # 获取拍摄时间（标签306对应DateTime）
+            if 306 in exifdata:
+                # 原始格式: "2025:12:04 00:01:09"
+                time_str = exifdata[306]
+
+                # 直接转换格式：移除冒号、空格和横杠
+                timestamp = (time_str
+                             .replace(':', '')
+                             .replace(' ', '')
+                             .replace('-', ''))
+
+                return timestamp
+            else:
+                print(f"警告: {os.path.basename(image_path)} 未找到时间信息")
+                return None
+        except Exception as e:
+            print(f"错误: 读取 {os.path.basename(image_path)} 时出错: {e}")
             return None
 
-    def create_processed_directory(self, time_stamp):
-        """
-        根据时间戳创建 pixel/img 子目录，并标记目录已准备好。
-        """
-        processed_dir = os.path.join(self.camera_processed_path, time_stamp)
-        pixel_dir = os.path.join(processed_dir, 'pixel')
-        img_dir = os.path.join(processed_dir, 'img')  # 新增img目录
-
-        os.makedirs(pixel_dir, exist_ok=True)
-        os.makedirs(img_dir, exist_ok=True)  # 创建img目录
-        self.processed_dir_created = True
-        return pixel_dir, img_dir  # 返回两个目录路径
-
     def on_created(self, event):
-        """
-        监听批次内 JPG/PNG 的创建，串行处理文件并触发时间戳抽取。
-        """
         if not event.is_directory and event.src_path.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp')):
             filename = os.path.basename(event.src_path)
 
             # 使用线程锁确保每个文件的处理是串行的
             with self.processing_lock:
-                # 检查是否为0001图片
-                if filename.endswith('_0001.jpg') or filename.endswith('_0001.png'):
-                    self.logger.info(f"检测到0001图片: {filename}")
-                    print(f"检测到0001图片: {filename}")
-
-                    self.logger.info(f"等待 {self.wait_time} 秒确保文件完全写入...")
-                    time.sleep(self.wait_time)  # 等待文件完全写入
-
-                    # 提取时间戳
-                    self.logger.info(f"开始从图片提取时间戳: {filename}")
-                    self.time_stamp = self.get_time_stamp_from_image(event.src_path)
-                    if self.time_stamp:
-                        self.logger.info(f"成功提取时间戳: {self.time_stamp}")
-                        print(f"提取到时间戳: {self.time_stamp}")
-                        self.create_processed_directory(self.time_stamp)
-                    else:
-                        self.logger.warning(f"时间戳提取失败: {filename}")
-
-                # 处理所有图片文件（包括0001图片）
+                # 处理所有图片文件
                 if filename not in self.processed_files:
-                    self.logger.info(f"新图片待处理: {filename}")
-                    time.sleep(self.wait_time)
+                    time.sleep(self.wait_time)  # 等待文件完全写入
                     self.processed_files.add(filename)
                     self.process_image(event.src_path, filename)
-                else:
-                    self.logger.debug(f"图片已处理，跳过: {filename}")
 
     def process_image(self, src_path, filename):
         """
@@ -344,19 +314,7 @@ class TimeFolderHandler(FileSystemEventHandler):
         except Exception as e:
             self.logger.warning(f"无法获取文件信息: {e}")
 
-        # 如果时间戳不存在，尝试从0001图片重新提取
-        if not self.time_stamp:
-            self.logger.warning("时间戳未设置，尝试重新提取...")
-            time_stamp = self.get_time_stamp_from_0001_image()
-            if time_stamp:
-                self.time_stamp = time_stamp
-                self.create_processed_directory(self.time_stamp)
-                self.logger.info(f"重新提取时间戳成功: {self.time_stamp}")
-            else:
-                self.logger.error("重新提取时间戳失败")
-                self.logger.warning(f"尚未提取到时间戳，跳过处理: {filename}")
-                print(f"警告: 尚未提取到时间戳，跳过处理 {filename}")
-                return
+        timestamp = self.get_image_timestamp(src_path)
 
         try:
             # 开始像素坐标提取
@@ -372,20 +330,13 @@ class TimeFolderHandler(FileSystemEventHandler):
 
             self.logger.info(f"像素坐标提取成功 - 点数: {len(pixelpoints)}, 耗时: {extract_time:.3f}秒")
 
-            if not self.processed_dir_created and self.time_stamp:
-                self.pixel_dir, self.img_dir = self.create_processed_directory(self.time_stamp)
-            elif self.time_stamp:
-                self.pixel_dir = os.path.join(self.camera_processed_path, self.time_stamp, 'pixel')
-                self.img_dir = os.path.join(self.camera_processed_path, self.time_stamp, 'img')
-
-            # 保存像素坐标结果
-            base_name = os.path.splitext(filename)[0]
-            pixel_result_path = os.path.join(self.pixel_dir, f"{base_name}.txt")
-
             # 将pixelpoints转换为排序后的列表
             sorted_points = pixelpoints.tolist() if hasattr(pixelpoints, 'tolist') else list(pixelpoints)
-            self.logger.info(f"保存像素坐标文件: {pixel_result_path} - {len(sorted_points)}个点")
 
+            # 使用时间戳作为文件名前缀
+            timestamp_filename = timestamp
+            pixel_result_path = os.path.join(self.pixel_dir, f"{timestamp_filename}.txt")
+            self.logger.info(f"保存像素坐标文件: {pixel_result_path} - {len(sorted_points)}个点")
             start_time = time.time()
             with open(pixel_result_path, 'w') as f:
                 for idx, (x, y) in enumerate(sorted_points, 1):
@@ -393,41 +344,35 @@ class TimeFolderHandler(FileSystemEventHandler):
             save_time = time.time() - start_time
             self.logger.info(f"像素坐标文件保存完成，耗时: {save_time:.3f}秒")
 
-            # 备份图片并绘制坐标点
-            img_backup_path = os.path.join(self.img_dir, filename)
-            self.logger.info(f"开始生成标注图片: {img_backup_path}")
+            # 备份图片
+            file_extension = os.path.splitext(filename)[1]
+            img_backup_path = os.path.join(self.img_dir, f"{timestamp_filename}{file_extension}")
+            self.logger.info(f"开始备份图片: {img_backup_path}")
+            start_time = time.time()
+            shutil.copy2(src_path, img_backup_path)
+            backup_time=time.time()-start_time
+            self.logger.info(f"备份图片生成完成，耗时: {backup_time:.3f}秒")
 
+            # 标注图片
+            file_extension = os.path.splitext(filename)[1]
+            img_draw_path = os.path.join(self.draw_img_dir, f"{timestamp_filename}{file_extension}")
+            self.logger.info(f"开始生成标注图片: {img_draw_path}")
             start_time = time.time()
             img = cv2.imread(src_path)
-            if img is None:
-                self.logger.error(f"无法读取源图片进行标注: {src_path}")
-                raise Exception("图片读取失败")
-
-            # 绘制编号和坐标点
             img_draw = img.copy()
-            circle_radius = self.draw_params.get('circle_radius', 2)
-            circle_color = self.draw_params.get('circle_color', [0, 255, 0])
-            font_scale = self.draw_params.get('font_scale', 3)
-            font_thickness = self.draw_params.get('font_thickness', 2)
-            font_color = self.draw_params.get('font_color', [0, 255, 0])
-
             for idx, (x, y) in enumerate(sorted_points, 1):
-                cv2.circle(img_draw, (int(x), int(y)), circle_radius, circle_color, -1)
+                cv2.circle(img_draw, (int(x), int(y)), 2, (255, 0, 0), -1)
                 cv2.putText(img_draw, str(idx), (int(x + 10), int(y - 10)),
-                            cv2.FONT_HERSHEY_SIMPLEX, font_scale, font_color, font_thickness)
-
-            cv2.imwrite(img_backup_path, img_draw)
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 2)
+            cv2.imwrite(img_draw_path, img_draw, [cv2.IMWRITE_JPEG_QUALITY, 25])
             draw_time = time.time() - start_time
             self.logger.info(f"标注图片生成完成，耗时: {draw_time:.3f}秒")
-
-            del img_draw
-            del img
 
             # 删除原始图片
             original_size = os.path.getsize(src_path)
             os.remove(src_path)
             self.logger.info(f"原始图片已删除: {src_path} ({original_size} bytes)")
-            self.logger.info(f"图片处理完成: {filename} -> 坐标文件: {base_name}.txt, 标注图片: {filename}")
+            self.logger.info(f"图片处理完成: {filename} -> 坐标文件: {timestamp_filename}.txt, 备份图片: {filename}")
             # TODO: 为 os.remove 增加异常回退，比如移动到 quarantine 目录。
 
         except Exception as e:
@@ -437,16 +382,6 @@ class TimeFolderHandler(FileSystemEventHandler):
             # 记录异常详情
             import traceback
             self.logger.error(f"异常堆栈: {traceback.format_exc()}")
-
-    def get_time_stamp_from_0001_image(self):
-        """
-        搜索当前批次下的 0001 图片并再次尝试 OCR，避免时间戳缺失。
-        """
-        for f in os.listdir(self.time_folder_path):
-            if f.endswith(('_0001.jpg', '_0001.png')):
-                filepath = os.path.join(self.time_folder_path, f)
-                return self.get_time_stamp_from_image(filepath)
-        return None
 
 
 # 使用示例
@@ -464,17 +399,12 @@ if __name__ == "__main__":
         # 从配置获取路径
         base_upload_path = config.get_base_upload_path()
         base_processed_path = config.get_base_processed_path()
-        tesseract_cmd = config.get_tesseract_cmd()
 
         # 从配置获取相机配置
         camera_configs = config.get_camera_configs()
 
-        # 从配置获取 OCR 区域
-        ocr_coord = config.get_ocr_region()
-
         # 从配置获取处理参数
         wait_time = config.get_file_wait_time()
-        draw_params = config.get_draw_params()
 
         # 确保必要的目录存在
         config.ensure_directories()
@@ -491,8 +421,6 @@ if __name__ == "__main__":
         logger.info(f"运行环境: {config.env}")
         logger.info(f"监控上传目录: {base_upload_path}")
         logger.info(f"输出处理目录: {base_processed_path}")
-        logger.info(f"Tesseract路径: {tesseract_cmd}")
-        logger.info(f"OCR区域: {ocr_coord}")
         logger.info(f"等待时间: {wait_time}秒")
         logger.info(f"相机数量: {len(camera_configs)}")
         for camera_name in camera_configs.keys():
@@ -503,9 +431,7 @@ if __name__ == "__main__":
             base_upload_path,
             base_processed_path,
             camera_configs=camera_configs,
-            ocr_coord=ocr_coord,
             wait_time=wait_time,
-            draw_params=draw_params,
             logger=logger
         )
 

@@ -149,27 +149,6 @@ def test_tesseract_paths():
         print(f"   ❌ Tesseract路径测试失败: {e}")
         return False
 
-def test_ocr_functionality():
-    """测试OCR功能"""
-    print("\n📄 测试OCR功能集成...")
-
-    try:
-        # 测试OCR模块导入
-        from ocr_Ex_time import extract_timestamp_from_image
-        print("   ✅ OCR模块导入成功")
-
-        # 测试配置集成
-        from config_loader import load_config
-        config = load_config()
-        ocr_region = config.get_ocr_region()
-        print(f"   ✅ OCR区域配置: {ocr_region}")
-
-        return True
-
-    except Exception as e:
-        print(f"   ❌ OCR功能测试失败: {e}")
-        return False
-
 def generate_test_report():
     """生成测试报告"""
     print("\n" + "="*60)
@@ -182,7 +161,6 @@ def generate_test_report():
     test_results.append(("配置加载器多环境支持", test_config_loader()))
     test_results.append(("目录创建功能", test_directory_creation()))
     test_results.append(("Tesseract路径配置", test_tesseract_paths()))
-    test_results.append(("OCR功能集成", test_ocr_functionality()))
 
     # 统计结果
     passed = sum(1 for _, result in test_results if result)

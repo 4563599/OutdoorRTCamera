@@ -5,18 +5,14 @@ environments:
   windows:
     paths:
       # Windows 测试环境路径
-      base_upload_path: "D:\\pic_back\\atli_uploads"
-      base_processed_path: "D:\\pic_back\\atli_processed"
-    tesseract:
-      cmd_path: "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+      base_upload_path: "RT_text/atli_uploads"
+      base_processed_path: "RT_text/atli_processed"
 
   linux:
     paths:
       # Linux 生产环境路径
       base_upload_path: "/var/ftp/atli_uploads"
       base_processed_path: "/var/ftp/atli_processed"
-    tesseract:
-      cmd_path: "/usr/bin/tesseract"
 
 # 默认环境配置（向后兼容）
 paths:
@@ -26,39 +22,31 @@ paths:
   # 处理结果输出的根目录（像素坐标和备份图片）
   base_processed_path: "/var/ftp/atli_processed"
 
-# Tesseract OCR 配置
-tesseract:
-  # Tesseract 可执行文件路径
-  cmd_path: "/usr/bin/tesseract"
-
-# OCR 时间戳提取区域配置（像素坐标）
-ocr:
-  # 时间戳区域坐标 (x1, y1, x2, y2)
-  timestamp_region:
-    x1: 182
-    y1: 1893
-    x2: 810
-    y2: 1962
-
 # 相机配置
 cameras:
   camera1:
     # ROI 多边形顶点坐标 (x, y)
     polygon_pts:
-      - [1099, 1608]
-      - [1101, 825]
-      - [2925, 835]
-      - [2925, 1667]
+      - [1190,550]
+      - [2450,550]
+      - [2450,2030]
+      - [1190,2030]
+
+    init_points_path:
+      'init_Pixel/pixel/176.txt'
 
     # 是否启用
     enabled: true
 
   camera2:
     polygon_pts:
-      - [1099, 1608]
-      - [1101, 825]
-      - [2925, 835]
-      - [2925, 1667]
+      - [1490,640]
+      - [2620,640]
+      - [2620,2040]
+      - [1490,2040]
+
+    init_points_path:
+      'init_Pixel/pixel/293.txt'
 
     enabled: true
 
@@ -66,19 +54,6 @@ cameras:
 processing:
   # 文件写入等待时间（秒）
   file_wait_time: 2
-
-  # 图片绘制参数
-  draw:
-    # 圆点半径
-    circle_radius: 2
-    # 圆点颜色 (B, G, R)
-    circle_color: [0, 255, 0]
-    # 文字字体大小
-    font_scale: 3
-    # 文字线条粗细
-    font_thickness: 2
-    # 文字颜色 (B, G, R)
-    font_color: [0, 255, 0]
 
 # 日志配置
 logging:

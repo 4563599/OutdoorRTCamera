@@ -42,7 +42,6 @@ sudo journalctl -u atli-camera-monitor -f
 ### 软件要求
 - 操作系统: CentOS 7/8 或 Ubuntu 18.04+
 - Python: 3.8
-- Tesseract OCR: 4.0+
 
 ## 部署步骤
 
@@ -64,20 +63,11 @@ sudo yum groupinstall -y "Development Tools"
 sudo yum install -y python38 python38-pip python38-devel
 sudo yum install -y opencv opencv-devel
 sudo yum install -y epel-release
-sudo yum install -y tesseract tesseract-langpack-eng tesseract-langpack-chi-sim
 
 # Ubuntu
 sudo apt install -y build-essential
 sudo apt install -y python3.8 python3.8-pip python3.8-dev
 sudo apt install -y libopencv-dev python3-opencv
-sudo apt install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-chi-sim
-sudo apt install -y libtesseract-dev
-```
-
-#### 1.3 验证 Tesseract 安装
-```bash
-tesseract --version
-# 应该显示版本信息，如 tesseract 4.1.1
 ```
 
 ### 2. 创建项目目录和用户

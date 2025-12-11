@@ -1,0 +1,107 @@
+2025-12-02 17:08:19,662 - atli_monitor - INFO - 日志系统已启动，日志文件: logs\atli_monitor_20251202_170819.log
+2025-12-02 17:08:19,663 - atli_monitor - INFO - === ATLI 相机监控系统启动 ===
+2025-12-02 17:08:19,669 - config_loader - INFO - 检测到运行环境: windows
+2025-12-02 17:08:19,669 - config_loader - INFO - 使用 windows 环境配置
+2025-12-02 17:08:19,669 - config_loader - INFO - 当前环境: windows
+2025-12-02 17:08:19,669 - config_loader - INFO - 上传目录: D:\pic_back\atli_uploads
+2025-12-02 17:08:19,670 - config_loader - INFO - 处理目录: D:\pic_back\atli_processed
+2025-12-02 17:08:19,670 - config_loader - INFO - 确保目录存在: D:\pic_back\atli_uploads\camera1
+2025-12-02 17:08:19,685 - config_loader - INFO - 确保目录存在: D:\pic_back\atli_uploads\camera2
+2025-12-02 17:08:19,686 - config_loader - INFO - 确保目录存在: D:\pic_back\atli_processed
+2025-12-02 17:08:19,686 - config_loader - INFO - 确保日志目录存在: /var/log
+2025-12-02 17:08:19,686 - atli_monitor - INFO - ========================================
+2025-12-02 17:08:19,686 - atli_monitor - INFO - 系统配置信息
+2025-12-02 17:08:19,686 - atli_monitor - INFO - 运行环境: windows
+2025-12-02 17:08:19,687 - atli_monitor - INFO - 监控上传目录: D:\pic_back\atli_uploads
+2025-12-02 17:08:19,687 - atli_monitor - INFO - 输出处理目录: D:\pic_back\atli_processed
+2025-12-02 17:08:19,687 - atli_monitor - INFO - Tesseract路径: C:\Program Files\Tesseract-OCR\tesseract.exe
+2025-12-02 17:08:19,687 - atli_monitor - INFO - OCR区域: (182, 1893, 810, 1962)
+2025-12-02 17:08:19,687 - atli_monitor - INFO - 等待时间: 2秒
+2025-12-02 17:08:19,687 - atli_monitor - INFO - 相机数量: 2
+2025-12-02 17:08:19,687 - atli_monitor - INFO -   - camera1
+2025-12-02 17:08:19,687 - atli_monitor - INFO -   - camera2
+2025-12-02 17:08:19,687 - atli_monitor - INFO - ========================================
+2025-12-02 17:08:19,687 - atli_monitor - INFO - 初始化相机监控器 - 相机数量: 2
+2025-12-02 17:08:19,687 - atli_monitor - INFO - 监控路径: D:\pic_back\atli_uploads
+2025-12-02 17:08:19,687 - atli_monitor - INFO - 处理路径: D:\pic_back\atli_processed
+2025-12-02 17:08:19,687 - atli_monitor - INFO - OCR区域: (182, 1893, 810, 1962)
+2025-12-02 17:08:19,688 - atli_monitor - INFO - 等待时间: 2秒
+2025-12-02 17:08:19,688 - atli_monitor - INFO - 相机 camera1 像素提取器初始化成功
+2025-12-02 17:08:19,688 - atli_monitor - INFO - 相机 camera2 像素提取器初始化成功
+2025-12-02 17:08:19,688 - atli_monitor - INFO - 开始启动监控服务...
+2025-12-02 17:08:19,689 - atli_monitor - INFO - 初始化相机处理器 - camera1
+2025-12-02 17:08:19,689 - atli_monitor - INFO - 监控路径: D:\pic_back\atli_uploads\camera1
+2025-12-02 17:08:19,689 - atli_monitor - INFO - 输出路径: D:\pic_back\atli_processed\camera1
+2025-12-02 17:08:19,691 - atli_monitor - INFO - 开始监控相机: camera1 - 路径: D:\pic_back\atli_uploads\camera1
+2025-12-02 17:08:19,691 - atli_monitor - INFO - 初始化相机处理器 - camera2
+2025-12-02 17:08:19,692 - atli_monitor - INFO - 监控路径: D:\pic_back\atli_uploads\camera2
+2025-12-02 17:08:19,692 - atli_monitor - INFO - 输出路径: D:\pic_back\atli_processed\camera2
+2025-12-02 17:08:19,693 - atli_monitor - INFO - 开始监控相机: camera2 - 路径: D:\pic_back\atli_uploads\camera2
+2025-12-02 17:08:19,693 - atli_monitor - INFO - 所有相机监控已启动成功
+2025-12-02 17:08:25,482 - atli_monitor - INFO - 检测到新时间文件夹: TLS_0202-random
+2025-12-02 17:08:25,483 - atli_monitor - INFO - 检测到新时间文件夹: TLS_0202-random
+2025-12-02 17:08:25,484 - atli_monitor - INFO - 更新监控文件夹: TLS_0202-random
+2025-12-02 17:08:25,484 - atli_monitor - INFO - 更新监控文件夹: TLS_0202-random
+2025-12-02 17:08:25,485 - atli_monitor - INFO - 初始化时间文件夹处理器 - camera1/TLS_0202-random
+2025-12-02 17:08:25,485 - atli_monitor - INFO - 初始化时间文件夹处理器 - camera2/TLS_0202-random
+2025-12-02 17:08:25,486 - atli_monitor - INFO - 监控路径: D:\pic_back\atli_uploads\camera1\TLS_0202-random
+2025-12-02 17:08:25,486 - atli_monitor - INFO - 监控路径: D:\pic_back\atli_uploads\camera2\TLS_0202-random
+2025-12-02 17:08:25,487 - atli_monitor - INFO - OCR区域: (182, 1893, 810, 1962)
+2025-12-02 17:08:25,487 - atli_monitor - INFO - OCR区域: (182, 1893, 810, 1962)
+2025-12-02 17:08:25,487 - atli_monitor - INFO - 等待时间: 2秒
+2025-12-02 17:08:25,487 - atli_monitor - INFO - 等待时间: 2秒
+2025-12-02 17:08:27,496 - atli_monitor - INFO - 检测到0001图片: TLS_0202_0001.jpg
+2025-12-02 17:08:27,496 - atli_monitor - INFO - 等待 2 秒确保文件完全写入...
+2025-12-02 17:08:27,505 - atli_monitor - INFO - 检测到0001图片: TLS_0202_0001.jpg
+2025-12-02 17:08:27,505 - atli_monitor - INFO - 等待 2 秒确保文件完全写入...
+2025-12-02 17:08:29,508 - atli_monitor - INFO - 开始从图片提取时间戳: TLS_0202_0001.jpg
+2025-12-02 17:08:29,509 - atli_monitor - INFO - 开始从图片提取时间戳: TLS_0202_0001.jpg
+2025-12-02 17:08:30,159 - atli_monitor - INFO - 成功提取时间戳: 20251003142002
+2025-12-02 17:08:30,180 - atli_monitor - INFO - 成功提取时间戳: 20251003142002
+2025-12-02 17:08:30,251 - atli_monitor - INFO - 新图片待处理: TLS_0202_0001.jpg
+2025-12-02 17:08:30,252 - atli_monitor - INFO - 新图片待处理: TLS_0202_0001.jpg
+2025-12-02 17:08:32,252 - atli_monitor - INFO - 开始处理图片: TLS_0202_0001.jpg
+2025-12-02 17:08:32,253 - atli_monitor - INFO - 开始处理图片: TLS_0202_0001.jpg
+2025-12-02 17:08:32,254 - atli_monitor - INFO - 图片文件信息 - 大小: 7214513 bytes
+2025-12-02 17:08:32,254 - atli_monitor - INFO - 图片文件信息 - 大小: 7214513 bytes
+2025-12-02 17:08:32,254 - atli_monitor - INFO - 开始提取像素坐标: TLS_0202_0001.jpg
+2025-12-02 17:08:32,254 - atli_monitor - INFO - 开始提取像素坐标: TLS_0202_0001.jpg
+2025-12-02 17:08:32,571 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 29, 耗时: 0.317秒
+2025-12-02 17:08:32,571 - atli_monitor - INFO - 保存像素坐标文件: D:\pic_back\atli_processed\camera1\20251003142002\pixel\TLS_0202_0001.txt - 29个点
+2025-12-02 17:08:32,572 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.000秒
+2025-12-02 17:08:32,572 - atli_monitor - INFO - 开始生成标注图片: D:\pic_back\atli_processed\camera1\20251003142002\img\TLS_0202_0001.jpg
+2025-12-02 17:08:32,598 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 29, 耗时: 0.343秒
+2025-12-02 17:08:32,598 - atli_monitor - INFO - 保存像素坐标文件: D:\pic_back\atli_processed\camera2\20251003142002\pixel\TLS_0202_0001.txt - 29个点
+2025-12-02 17:08:32,599 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.000秒
+2025-12-02 17:08:32,600 - atli_monitor - INFO - 开始生成标注图片: D:\pic_back\atli_processed\camera2\20251003142002\img\TLS_0202_0001.jpg
+2025-12-02 17:08:33,185 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.585秒
+2025-12-02 17:08:33,191 - atli_monitor - INFO - 原始图片已删除: D:\pic_back\atli_uploads\camera2\TLS_0202-random\TLS_0202_0001.jpg (7214513 bytes)
+2025-12-02 17:08:33,191 - atli_monitor - INFO - 图片处理完成: TLS_0202_0001.jpg -> 坐标文件: TLS_0202_0001.txt, 标注图片: TLS_0202_0001.jpg
+2025-12-02 17:08:33,206 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.634秒
+2025-12-02 17:08:33,216 - atli_monitor - INFO - 原始图片已删除: D:\pic_back\atli_uploads\camera1\TLS_0202-random\TLS_0202_0001.jpg (7214513 bytes)
+2025-12-02 17:08:33,217 - atli_monitor - INFO - 图片处理完成: TLS_0202_0001.jpg -> 坐标文件: TLS_0202_0001.txt, 标注图片: TLS_0202_0001.jpg
+2025-12-02 17:08:42,523 - atli_monitor - INFO - 新图片待处理: TLS_0202_0002.jpg
+2025-12-02 17:08:42,536 - atli_monitor - INFO - 新图片待处理: TLS_0202_0002.jpg
+2025-12-02 17:08:44,523 - atli_monitor - INFO - 开始处理图片: TLS_0202_0002.jpg
+2025-12-02 17:08:44,524 - atli_monitor - INFO - 图片文件信息 - 大小: 7214513 bytes
+2025-12-02 17:08:44,524 - atli_monitor - INFO - 开始提取像素坐标: TLS_0202_0002.jpg
+2025-12-02 17:08:44,539 - atli_monitor - INFO - 开始处理图片: TLS_0202_0002.jpg
+2025-12-02 17:08:44,539 - atli_monitor - INFO - 图片文件信息 - 大小: 7214513 bytes
+2025-12-02 17:08:44,539 - atli_monitor - INFO - 开始提取像素坐标: TLS_0202_0002.jpg
+2025-12-02 17:08:44,891 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 29, 耗时: 0.352秒
+2025-12-02 17:08:44,891 - atli_monitor - INFO - 保存像素坐标文件: D:\pic_back\atli_processed\camera2\20251003142002\pixel\TLS_0202_0002.txt - 29个点
+2025-12-02 17:08:44,892 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.001秒
+2025-12-02 17:08:44,892 - atli_monitor - INFO - 开始生成标注图片: D:\pic_back\atli_processed\camera2\20251003142002\img\TLS_0202_0002.jpg
+2025-12-02 17:08:44,902 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 29, 耗时: 0.377秒
+2025-12-02 17:08:44,902 - atli_monitor - INFO - 保存像素坐标文件: D:\pic_back\atli_processed\camera1\20251003142002\pixel\TLS_0202_0002.txt - 29个点
+2025-12-02 17:08:44,903 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.001秒
+2025-12-02 17:08:44,903 - atli_monitor - INFO - 开始生成标注图片: D:\pic_back\atli_processed\camera1\20251003142002\img\TLS_0202_0002.jpg
+2025-12-02 17:08:45,440 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.538秒
+2025-12-02 17:08:45,446 - atli_monitor - INFO - 原始图片已删除: D:\pic_back\atli_uploads\camera1\TLS_0202-random\TLS_0202_0002.jpg (7214513 bytes)
+2025-12-02 17:08:45,446 - atli_monitor - INFO - 图片处理完成: TLS_0202_0002.jpg -> 坐标文件: TLS_0202_0002.txt, 标注图片: TLS_0202_0002.jpg
+2025-12-02 17:08:45,467 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.575秒
+2025-12-02 17:08:45,474 - atli_monitor - INFO - 原始图片已删除: D:\pic_back\atli_uploads\camera2\TLS_0202-random\TLS_0202_0002.jpg (7214513 bytes)
+2025-12-02 17:08:45,474 - atli_monitor - INFO - 图片处理完成: TLS_0202_0002.jpg -> 坐标文件: TLS_0202_0002.txt, 标注图片: TLS_0202_0002.jpg
+2025-12-02 17:08:56,360 - atli_monitor - INFO - 接收到停止信号...
+2025-12-02 17:08:56,360 - atli_monitor - INFO - 用户手动停止监控
+2025-12-02 17:08:56,361 - atli_monitor - INFO - 监控服务已停止

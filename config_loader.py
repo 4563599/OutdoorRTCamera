@@ -98,19 +98,18 @@ class ConfigLoader:
         """获取处理结果根路径"""
         return self._get_env_config('paths.base_processed_path')
 
-    def get_tesseract_cmd(self):
-        """获取 Tesseract 可执行文件路径"""
-        return self._get_env_config('tesseract.cmd_path')
-
-    def get_ocr_region(self):
-        """
-        获取 OCR 时间戳提取区域坐标
-
-        Returns:
-            tuple: (x1, y1, x2, y2)
-        """
-        region = self.config['ocr']['timestamp_region']
-        return (region['x1'], region['y1'], region['x2'], region['y2'])
+    # 修改，增加静态方法
+    @staticmethod
+    def load_init_points(init_path):
+        """从init.txt加载初始点坐标"""
+        points = []
+        with open(init_path, 'r') as f:
+            for line in f:
+                parts = line.strip().split()
+                if len(parts) >= 3:
+                    x, y = float(parts[1]), float(parts[2])
+                    points.append([x, y])
+        return np.array(points, dtype=np.float32)
 
     def get_camera_configs(self):
         """
@@ -126,10 +125,12 @@ class ConfigLoader:
             if not camera_info.get('enabled', True):
                 continue
 
+            # 修改，增加初始像素点坐标
             polygon_pts = np.array(camera_info['polygon_pts'], dtype=np.int32)
+            init_points_path= camera_info['init_points_path']
             camera_configs[camera_name] = {
                 'polygon_pts': polygon_pts,
-                'pre_points': None
+                'pre_points': ConfigLoader.load_init_points(init_points_path)
             }
 
         return camera_configs
@@ -137,15 +138,6 @@ class ConfigLoader:
     def get_file_wait_time(self):
         """获取文件写入等待时间"""
         return self.config['processing'].get('file_wait_time', 2)
-
-    def get_draw_params(self):
-        """
-        获取图片绘制参数
-
-        Returns:
-            dict: 包含绘制参数的字典
-        """
-        return self.config['processing']['draw']
 
     def get_log_config(self):
         """
@@ -222,8 +214,6 @@ if __name__ == "__main__":
         print("配置加载成功！")
         print(f"上传路径: {config.get_base_upload_path()}")
         print(f"处理路径: {config.get_base_processed_path()}")
-        print(f"Tesseract: {config.get_tesseract_cmd()}")
-        print(f"OCR区域: {config.get_ocr_region()}")
         print(f"相机配置: {list(config.get_camera_configs().keys())}")
 
         # 确保目录存在

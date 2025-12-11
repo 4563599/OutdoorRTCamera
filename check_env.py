@@ -47,24 +47,13 @@ class EnvironmentChecker:
             return True
         return False
 
-    def check_tesseract(self):
-        """检查 Tesseract 安装"""
-        try:
-            result = subprocess.run(['tesseract', '--version'],
-                                  capture_output=True, text=True)
-            if result.returncode == 0:
-                version = result.stdout.split('\n')[0]
-                print(f"   {version}")
-                return True
-        except FileNotFoundError:
-            pass
-        return False
+
 
     def check_required_packages(self):
         """检查必需的 Python 包"""
         packages = [
             'cv2', 'numpy', 'scipy', 'watchdog',
-            'matplotlib', 'openpyxl', 'pytesseract', 'yaml'
+            'matplotlib', 'openpyxl', 'yaml'
         ]
 
         missing = []
@@ -124,7 +113,6 @@ class EnvironmentChecker:
                 print(f"   🖥️  运行环境: {config.env}")
                 print(f"   📁 上传路径: {config.get_base_upload_path()}")
                 print(f"   📁 处理路径: {config.get_base_processed_path()}")
-                print(f"   🔧 Tesseract路径: {config.get_tesseract_cmd()}")
 
                 # 检查多环境配置
                 if 'environments' in config.config:
@@ -196,7 +184,6 @@ class EnvironmentChecker:
 
         # 必需检查
         self.check("Python 版本 (>= 3.8)", self.check_python_version, True)
-        self.check("Tesseract OCR", self.check_tesseract, True)
         self.check("Python 依赖包", self.check_required_packages, True)
         self.check("配置文件", self.check_config_file, True)
         self.check("目录结构", self.check_directories, True)
@@ -226,8 +213,7 @@ def main():
         print("1. 安装缺失的依赖: pip install -r requirements.txt")
         print("2. 创建必要目录: sudo mkdir -p /var/ftp/atli_uploads/{camera1,camera2}")
         print("3. 设置目录权限: sudo chown -R $USER:$USER /var/ftp/")
-        print("4. 安装 Tesseract: sudo yum install tesseract (CentOS) 或 sudo apt install tesseract-ocr (Ubuntu)")
-        print("5. 检查配置文件: vim config.yaml")
+        print("4. 检查配置文件: vim config.yaml")
 
         sys.exit(1)
     else:

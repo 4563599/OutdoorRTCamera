@@ -1,0 +1,204 @@
+2025-12-09 21:16:31,495 - atli_monitor - INFO - 日志系统已启动，日志文件: logs\atli_monitor_20251209_211631.log
+2025-12-09 21:16:31,495 - atli_monitor - INFO - === ATLI 相机监控系统启动 ===
+2025-12-09 21:16:31,500 - config_loader - INFO - 检测到运行环境: windows
+2025-12-09 21:16:31,500 - config_loader - INFO - 使用 windows 环境配置
+2025-12-09 21:16:31,500 - config_loader - INFO - 当前环境: windows
+2025-12-09 21:16:31,500 - config_loader - INFO - 上传目录: RT_text/atli_uploads
+2025-12-09 21:16:31,501 - config_loader - INFO - 处理目录: RT_text/atli_processed
+2025-12-09 21:16:31,501 - config_loader - INFO - 确保目录存在: RT_text/atli_uploads\camera1
+2025-12-09 21:16:31,503 - config_loader - INFO - 确保目录存在: RT_text/atli_uploads\camera2
+2025-12-09 21:16:31,503 - config_loader - INFO - 确保目录存在: RT_text/atli_processed
+2025-12-09 21:16:31,504 - config_loader - INFO - 确保日志目录存在: /var/log
+2025-12-09 21:16:31,504 - atli_monitor - INFO - ========================================
+2025-12-09 21:16:31,504 - atli_monitor - INFO - 系统配置信息
+2025-12-09 21:16:31,505 - atli_monitor - INFO - 运行环境: windows
+2025-12-09 21:16:31,505 - atli_monitor - INFO - 监控上传目录: RT_text/atli_uploads
+2025-12-09 21:16:31,505 - atli_monitor - INFO - 输出处理目录: RT_text/atli_processed
+2025-12-09 21:16:31,505 - atli_monitor - INFO - 等待时间: 2秒
+2025-12-09 21:16:31,505 - atli_monitor - INFO - 相机数量: 2
+2025-12-09 21:16:31,505 - atli_monitor - INFO -   - camera1
+2025-12-09 21:16:31,506 - atli_monitor - INFO -   - camera2
+2025-12-09 21:16:31,506 - atli_monitor - INFO - ========================================
+2025-12-09 21:16:31,506 - atli_monitor - INFO - 初始化相机监控器 - 相机数量: 2
+2025-12-09 21:16:31,506 - atli_monitor - INFO - 监控路径: RT_text/atli_uploads
+2025-12-09 21:16:31,506 - atli_monitor - INFO - 处理路径: RT_text/atli_processed
+2025-12-09 21:16:31,507 - atli_monitor - INFO - 等待时间: 2秒
+2025-12-09 21:16:31,507 - atli_monitor - INFO - 相机 camera1 像素提取器初始化成功
+2025-12-09 21:16:31,507 - atli_monitor - INFO - 相机 camera2 像素提取器初始化成功
+2025-12-09 21:16:31,507 - atli_monitor - INFO - 开始启动监控服务...
+2025-12-09 21:16:31,508 - atli_monitor - INFO - 初始化相机处理器 - camera1
+2025-12-09 21:16:31,508 - atli_monitor - INFO - 监控路径: RT_text/atli_uploads\camera1
+2025-12-09 21:16:31,508 - atli_monitor - INFO - 输出路径: RT_text/atli_processed\camera1
+2025-12-09 21:16:31,510 - atli_monitor - INFO - 开始监控相机: camera1 - 路径: RT_text/atli_uploads\camera1
+2025-12-09 21:16:31,510 - atli_monitor - INFO - 初始化相机处理器 - camera2
+2025-12-09 21:16:31,510 - atli_monitor - INFO - 监控路径: RT_text/atli_uploads\camera2
+2025-12-09 21:16:31,510 - atli_monitor - INFO - 输出路径: RT_text/atli_processed\camera2
+2025-12-09 21:16:31,511 - atli_monitor - INFO - 开始监控相机: camera2 - 路径: RT_text/atli_uploads\camera2
+2025-12-09 21:16:31,511 - atli_monitor - INFO - 所有相机监控已启动成功
+2025-12-09 21:16:35,494 - atli_monitor - INFO - 检测到新时间文件夹: TLS_0236_daasda
+2025-12-09 21:16:35,496 - atli_monitor - INFO - 更新监控文件夹: TLS_0236_daasda
+2025-12-09 21:16:35,496 - atli_monitor - INFO - 检测到新时间文件夹: TLS_0288_afsvweq
+2025-12-09 21:16:35,497 - atli_monitor - INFO - 更新监控文件夹: TLS_0288_afsvweq
+2025-12-09 21:16:35,500 - atli_monitor - INFO - 初始化时间文件夹处理器 - camera1/TLS_0236_daasda
+2025-12-09 21:16:35,500 - atli_monitor - INFO - 监控路径: RT_text/atli_uploads\camera1\TLS_0236_daasda
+2025-12-09 21:16:35,500 - atli_monitor - INFO - 等待时间: 2秒
+2025-12-09 21:16:35,501 - atli_monitor - INFO - 初始化时间文件夹处理器 - camera2/TLS_0288_afsvweq
+2025-12-09 21:16:35,501 - atli_monitor - INFO - 监控路径: RT_text/atli_uploads\camera2\TLS_0288_afsvweq
+2025-12-09 21:16:35,501 - atli_monitor - INFO - 等待时间: 2秒
+2025-12-09 21:16:42,517 - atli_monitor - INFO - 开始处理图片: TLS_0288_0061.jpg
+2025-12-09 21:16:42,517 - atli_monitor - INFO - 开始处理图片: TLS_0236_0061.jpg
+2025-12-09 21:16:42,518 - atli_monitor - INFO - 图片文件信息 - 大小: 10054236 bytes
+2025-12-09 21:16:42,518 - atli_monitor - INFO - 图片文件信息 - 大小: 9975228 bytes
+2025-12-09 21:16:42,543 - atli_monitor - INFO - 开始提取像素坐标: TLS_0288_0061.jpg
+2025-12-09 21:16:42,543 - atli_monitor - INFO - 开始提取像素坐标: TLS_0236_0061.jpg
+2025-12-09 21:16:43,073 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.529秒
+2025-12-09 21:16:43,075 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera2\TLS_0288\pixel\20251205100106.txt - 12个点
+2025-12-09 21:16:43,080 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.004秒
+2025-12-09 21:16:43,080 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera2\TLS_0288\img\20251205100106.jpg
+2025-12-09 21:16:43,112 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.032秒
+2025-12-09 21:16:43,112 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera2\TLS_0288\draw_img\20251205100106.jpg
+2025-12-09 21:16:43,119 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.574秒
+2025-12-09 21:16:43,119 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera1\TLS_0236\pixel\20251205100106.txt - 12个点
+2025-12-09 21:16:43,121 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.002秒
+2025-12-09 21:16:43,121 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera1\TLS_0236\img\20251205100106.jpg
+2025-12-09 21:16:43,151 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.030秒
+2025-12-09 21:16:43,152 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera1\TLS_0236\draw_img\20251205100106.jpg
+2025-12-09 21:16:43,457 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.346秒
+2025-12-09 21:16:43,459 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera2\TLS_0288_afsvweq\TLS_0288_0061.jpg (10054236 bytes)
+2025-12-09 21:16:43,459 - atli_monitor - INFO - 图片处理完成: TLS_0288_0061.jpg -> 坐标文件: 20251205100106.txt, 备份图片: TLS_0288_0061.jpg
+2025-12-09 21:16:43,514 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.363秒
+2025-12-09 21:16:43,517 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera1\TLS_0236_daasda\TLS_0236_0061.jpg (9975228 bytes)
+2025-12-09 21:16:43,517 - atli_monitor - INFO - 图片处理完成: TLS_0236_0061.jpg -> 坐标文件: 20251205100106.txt, 备份图片: TLS_0236_0061.jpg
+2025-12-09 21:16:57,581 - atli_monitor - INFO - 开始处理图片: TLS_0236_0097.jpg
+2025-12-09 21:16:57,581 - atli_monitor - INFO - 开始处理图片: TLS_0288_0097.jpg
+2025-12-09 21:16:57,582 - atli_monitor - INFO - 图片文件信息 - 大小: 9929976 bytes
+2025-12-09 21:16:57,583 - atli_monitor - INFO - 图片文件信息 - 大小: 9951964 bytes
+2025-12-09 21:16:57,585 - atli_monitor - INFO - 开始提取像素坐标: TLS_0288_0097.jpg
+2025-12-09 21:16:57,586 - atli_monitor - INFO - 开始提取像素坐标: TLS_0236_0097.jpg
+2025-12-09 21:16:58,104 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.520秒
+2025-12-09 21:16:58,104 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera2\TLS_0288\pixel\20251205160106.txt - 12个点
+2025-12-09 21:16:58,108 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.003秒
+2025-12-09 21:16:58,108 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera2\TLS_0288\img\20251205160106.jpg
+2025-12-09 21:16:58,124 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.539秒
+2025-12-09 21:16:58,125 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera1\TLS_0236\pixel\20251205160106.txt - 12个点
+2025-12-09 21:16:58,131 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.006秒
+2025-12-09 21:16:58,131 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera1\TLS_0236\img\20251205160106.jpg
+2025-12-09 21:16:58,155 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.047秒
+2025-12-09 21:16:58,156 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera2\TLS_0288\draw_img\20251205160106.jpg
+2025-12-09 21:16:58,170 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.039秒
+2025-12-09 21:16:58,171 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera1\TLS_0236\draw_img\20251205160106.jpg
+2025-12-09 21:16:58,465 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.309秒
+2025-12-09 21:16:58,466 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera2\TLS_0288_afsvweq\TLS_0288_0097.jpg (9929976 bytes)
+2025-12-09 21:16:58,467 - atli_monitor - INFO - 图片处理完成: TLS_0288_0097.jpg -> 坐标文件: 20251205160106.txt, 备份图片: TLS_0288_0097.jpg
+2025-12-09 21:16:58,528 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.357秒
+2025-12-09 21:16:58,531 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera1\TLS_0236_daasda\TLS_0236_0097.jpg (9951964 bytes)
+2025-12-09 21:16:58,532 - atli_monitor - INFO - 图片处理完成: TLS_0236_0097.jpg -> 坐标文件: 20251205160106.txt, 备份图片: TLS_0236_0097.jpg
+2025-12-09 21:17:12,631 - atli_monitor - INFO - 开始处理图片: TLS_0288_0133.jpg
+2025-12-09 21:17:12,631 - atli_monitor - INFO - 开始处理图片: TLS_0236_0133.jpg
+2025-12-09 21:17:12,632 - atli_monitor - INFO - 图片文件信息 - 大小: 5192607 bytes
+2025-12-09 21:17:12,632 - atli_monitor - INFO - 图片文件信息 - 大小: 5248154 bytes
+2025-12-09 21:17:12,635 - atli_monitor - INFO - 开始提取像素坐标: TLS_0288_0133.jpg
+2025-12-09 21:17:12,636 - atli_monitor - INFO - 开始提取像素坐标: TLS_0236_0133.jpg
+2025-12-09 21:17:13,059 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.423秒
+2025-12-09 21:17:13,060 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera1\TLS_0236\pixel\20251205220112.txt - 12个点
+2025-12-09 21:17:13,063 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.003秒
+2025-12-09 21:17:13,063 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera1\TLS_0236\img\20251205220112.jpg
+2025-12-09 21:17:13,081 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.018秒
+2025-12-09 21:17:13,081 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera1\TLS_0236\draw_img\20251205220112.jpg
+2025-12-09 21:17:13,102 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.466秒
+2025-12-09 21:17:13,102 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera2\TLS_0288\pixel\20251205220111.txt - 12个点
+2025-12-09 21:17:13,104 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.002秒
+2025-12-09 21:17:13,104 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera2\TLS_0288\img\20251205220111.jpg
+2025-12-09 21:17:13,124 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.019秒
+2025-12-09 21:17:13,124 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera2\TLS_0288\draw_img\20251205220111.jpg
+2025-12-09 21:17:13,416 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.292秒
+2025-12-09 21:17:13,417 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera2\TLS_0288_afsvweq\TLS_0288_0133.jpg (5192607 bytes)
+2025-12-09 21:17:13,417 - atli_monitor - INFO - 图片处理完成: TLS_0288_0133.jpg -> 坐标文件: 20251205220111.txt, 备份图片: TLS_0288_0133.jpg
+2025-12-09 21:17:13,420 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.339秒
+2025-12-09 21:17:13,421 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera1\TLS_0236_daasda\TLS_0236_0133.jpg (5248154 bytes)
+2025-12-09 21:17:13,421 - atli_monitor - INFO - 图片处理完成: TLS_0236_0133.jpg -> 坐标文件: 20251205220112.txt, 备份图片: TLS_0236_0133.jpg
+2025-12-09 21:17:40,684 - atli_monitor - INFO - 检测到新时间文件夹: TLS_0237_fasda
+2025-12-09 21:17:40,685 - atli_monitor - INFO - 检测到新时间文件夹: TLS_0289_dfasasfaca
+2025-12-09 21:17:40,699 - atli_monitor - INFO - 更新监控文件夹: TLS_0289_dfasasfaca
+2025-12-09 21:17:40,699 - atli_monitor - INFO - 更新监控文件夹: TLS_0237_fasda
+2025-12-09 21:17:40,703 - atli_monitor - INFO - 初始化时间文件夹处理器 - camera2/TLS_0289_dfasasfaca
+2025-12-09 21:17:40,703 - atli_monitor - INFO - 初始化时间文件夹处理器 - camera1/TLS_0237_fasda
+2025-12-09 21:17:40,704 - atli_monitor - INFO - 监控路径: RT_text/atli_uploads\camera2\TLS_0289_dfasasfaca
+2025-12-09 21:17:40,704 - atli_monitor - INFO - 监控路径: RT_text/atli_uploads\camera1\TLS_0237_fasda
+2025-12-09 21:17:40,705 - atli_monitor - INFO - 等待时间: 2秒
+2025-12-09 21:17:40,705 - atli_monitor - INFO - 等待时间: 2秒
+2025-12-09 21:17:47,695 - atli_monitor - INFO - 开始处理图片: TLS_0237_0061.jpg
+2025-12-09 21:17:47,695 - atli_monitor - INFO - 图片文件信息 - 大小: 10294953 bytes
+2025-12-09 21:17:47,696 - atli_monitor - INFO - 开始提取像素坐标: TLS_0237_0061.jpg
+2025-12-09 21:17:47,711 - atli_monitor - INFO - 开始处理图片: TLS_0289_0061.jpg
+2025-12-09 21:17:47,711 - atli_monitor - INFO - 图片文件信息 - 大小: 10339280 bytes
+2025-12-09 21:17:47,712 - atli_monitor - INFO - 开始提取像素坐标: TLS_0289_0061.jpg
+2025-12-09 21:17:48,159 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.463秒
+2025-12-09 21:17:48,164 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera1\TLS_0237\pixel\20251206100106.txt - 12个点
+2025-12-09 21:17:48,168 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.003秒
+2025-12-09 21:17:48,168 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera1\TLS_0237\img\20251206100106.jpg
+2025-12-09 21:17:48,201 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.033秒
+2025-12-09 21:17:48,201 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera1\TLS_0237\draw_img\20251206100106.jpg
+2025-12-09 21:17:48,207 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.495秒
+2025-12-09 21:17:48,208 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera2\TLS_0289\pixel\20251206100106.txt - 12个点
+2025-12-09 21:17:48,210 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.002秒
+2025-12-09 21:17:48,210 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera2\TLS_0289\img\20251206100106.jpg
+2025-12-09 21:17:48,241 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.031秒
+2025-12-09 21:17:48,242 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera2\TLS_0289\draw_img\20251206100106.jpg
+2025-12-09 21:17:48,566 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.365秒
+2025-12-09 21:17:48,568 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera1\TLS_0237_fasda\TLS_0237_0061.jpg (10294953 bytes)
+2025-12-09 21:17:48,568 - atli_monitor - INFO - 图片处理完成: TLS_0237_0061.jpg -> 坐标文件: 20251206100106.txt, 备份图片: TLS_0237_0061.jpg
+2025-12-09 21:17:48,576 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.334秒
+2025-12-09 21:17:48,580 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera2\TLS_0289_dfasasfaca\TLS_0289_0061.jpg (10339280 bytes)
+2025-12-09 21:17:48,580 - atli_monitor - INFO - 图片处理完成: TLS_0289_0061.jpg -> 坐标文件: 20251206100106.txt, 备份图片: TLS_0289_0061.jpg
+2025-12-09 21:18:02,769 - atli_monitor - INFO - 开始处理图片: TLS_0289_0097.jpg
+2025-12-09 21:18:02,769 - atli_monitor - INFO - 开始处理图片: TLS_0237_0097.jpg
+2025-12-09 21:18:02,770 - atli_monitor - INFO - 图片文件信息 - 大小: 9912701 bytes
+2025-12-09 21:18:02,770 - atli_monitor - INFO - 图片文件信息 - 大小: 9996918 bytes
+2025-12-09 21:18:02,773 - atli_monitor - INFO - 开始提取像素坐标: TLS_0289_0097.jpg
+2025-12-09 21:18:02,774 - atli_monitor - INFO - 开始提取像素坐标: TLS_0237_0097.jpg
+2025-12-09 21:18:03,290 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.515秒
+2025-12-09 21:18:03,290 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera2\TLS_0289\pixel\20251206160106.txt - 12个点
+2025-12-09 21:18:03,293 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.003秒
+2025-12-09 21:18:03,293 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera2\TLS_0289\img\20251206160106.jpg
+2025-12-09 21:18:03,330 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.557秒
+2025-12-09 21:18:03,330 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera1\TLS_0237\pixel\20251206160106.txt - 12个点
+2025-12-09 21:18:03,333 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.041秒
+2025-12-09 21:18:03,333 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera2\TLS_0289\draw_img\20251206160106.jpg
+2025-12-09 21:18:03,334 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.003秒
+2025-12-09 21:18:03,334 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera1\TLS_0237\img\20251206160106.jpg
+2025-12-09 21:18:03,365 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.031秒
+2025-12-09 21:18:03,366 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera1\TLS_0237\draw_img\20251206160106.jpg
+2025-12-09 21:18:03,633 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.299秒
+2025-12-09 21:18:03,636 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera2\TLS_0289_dfasasfaca\TLS_0289_0097.jpg (9912701 bytes)
+2025-12-09 21:18:03,636 - atli_monitor - INFO - 图片处理完成: TLS_0289_0097.jpg -> 坐标文件: 20251206160106.txt, 备份图片: TLS_0289_0097.jpg
+2025-12-09 21:18:03,745 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.379秒
+2025-12-09 21:18:03,746 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera1\TLS_0237_fasda\TLS_0237_0097.jpg (9996918 bytes)
+2025-12-09 21:18:03,747 - atli_monitor - INFO - 图片处理完成: TLS_0237_0097.jpg -> 坐标文件: 20251206160106.txt, 备份图片: TLS_0237_0097.jpg
+2025-12-09 21:18:17,810 - atli_monitor - INFO - 开始处理图片: TLS_0237_0133.jpg
+2025-12-09 21:18:17,810 - atli_monitor - INFO - 图片文件信息 - 大小: 5241017 bytes
+2025-12-09 21:18:17,812 - atli_monitor - INFO - 开始提取像素坐标: TLS_0237_0133.jpg
+2025-12-09 21:18:17,825 - atli_monitor - INFO - 开始处理图片: TLS_0289_0133.jpg
+2025-12-09 21:18:17,826 - atli_monitor - INFO - 图片文件信息 - 大小: 5144677 bytes
+2025-12-09 21:18:17,828 - atli_monitor - INFO - 开始提取像素坐标: TLS_0289_0133.jpg
+2025-12-09 21:18:18,265 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.452秒
+2025-12-09 21:18:18,268 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera1\TLS_0237\pixel\20251206220111.txt - 12个点
+2025-12-09 21:18:18,273 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.005秒
+2025-12-09 21:18:18,273 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera1\TLS_0237\img\20251206220111.jpg
+2025-12-09 21:18:18,290 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.017秒
+2025-12-09 21:18:18,291 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera1\TLS_0237\draw_img\20251206220111.jpg
+2025-12-09 21:18:18,321 - atli_monitor - INFO - 像素坐标提取成功 - 点数: 12, 耗时: 0.493秒
+2025-12-09 21:18:18,321 - atli_monitor - INFO - 保存像素坐标文件: RT_text/atli_processed\camera2\TLS_0289\pixel\20251206220111.txt - 12个点
+2025-12-09 21:18:18,323 - atli_monitor - INFO - 像素坐标文件保存完成，耗时: 0.002秒
+2025-12-09 21:18:18,323 - atli_monitor - INFO - 开始备份图片: RT_text/atli_processed\camera2\TLS_0289\img\20251206220111.jpg
+2025-12-09 21:18:18,339 - atli_monitor - INFO - 备份图片生成完成，耗时: 0.016秒
+2025-12-09 21:18:18,339 - atli_monitor - INFO - 开始生成标注图片: RT_text/atli_processed\camera2\TLS_0289\draw_img\20251206220111.jpg
+2025-12-09 21:18:18,578 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.287秒
+2025-12-09 21:18:18,580 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera1\TLS_0237_fasda\TLS_0237_0133.jpg (5241017 bytes)
+2025-12-09 21:18:18,580 - atli_monitor - INFO - 图片处理完成: TLS_0237_0133.jpg -> 坐标文件: 20251206220111.txt, 备份图片: TLS_0237_0133.jpg
+2025-12-09 21:18:18,598 - atli_monitor - INFO - 标注图片生成完成，耗时: 0.259秒
+2025-12-09 21:18:18,600 - atli_monitor - INFO - 原始图片已删除: RT_text/atli_uploads\camera2\TLS_0289_dfasasfaca\TLS_0289_0133.jpg (5144677 bytes)
+2025-12-09 21:18:18,600 - atli_monitor - INFO - 图片处理完成: TLS_0289_0133.jpg -> 坐标文件: 20251206220111.txt, 备份图片: TLS_0289_0133.jpg
+2025-12-09 21:18:50,295 - atli_monitor - INFO - 接收到停止信号...
+2025-12-09 21:18:50,295 - atli_monitor - INFO - 用户手动停止监控
+2025-12-09 21:18:50,317 - atli_monitor - INFO - 监控服务已停止
